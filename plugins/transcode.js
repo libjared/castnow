@@ -31,7 +31,6 @@ var transcode = function(ctx, next) {
     });
 
     var detect = new Transcoder(orgPath)
-      .custom('f', 'null')
       .on('metadata', function(meta) {
         var videoCodec, audioCodec;
         for (var i = 0; i < meta.input.streams.length; i++) {
@@ -44,10 +43,13 @@ var transcode = function(ctx, next) {
         doTranscode(orgPath, false, false, opts, res);
       })
       .on('error', function(err) {
+        //fast exit by making the command invalid
+        //we don't need to transcode yet, just probe for codecs
+        if (err.message.indexOf('At least one output file must be specified') > -1)
+          return;
         debug('metadata error: %o', err);
       })
-      .stream()
-      .on('data', function(d) { });
+      .exec();
   }).listen(port);
   debug('started webserver on address %s using port %s', ip, port);
   next();
