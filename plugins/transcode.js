@@ -39,8 +39,11 @@ var transcode = function(ctx, next) {
           if (strm.type === 'audio') audioCodec = strm.codec;
         }
         debug('got input metadata. vid:%s, aud:%s', videoCodec, audioCodec);
-        //todo: a/v codecs ok?
-        doTranscode(orgPath, false, false, opts, res);
+
+        vidOkToCopy = chromeSupportedVid.indexOf(videoCodec) > -1;
+        audOkToCopy = chromeSupportedAud.indexOf(audioCodec) > -1;
+        debug('copying vid:%s, aud:%s', vidOkToCopy, audOkToCopy);
+        doTranscode(orgPath, vidOkToCopy, audOkToCopy, opts, res);
       })
       .on('error', function(err) {
         //fast exit by making the command invalid
@@ -55,7 +58,7 @@ var transcode = function(ctx, next) {
   next();
 };
 
-var doTranscode = function(path, bAud, bVid, opts, res) {
+var doTranscode = function(path, bVid, bAud, opts, res) {
   var trans = new Transcoder(path)
     .videoCodec(bVid === true ? 'copy' : 'h264')
     .audioCodec(bAud === true ? 'copy' : 'vorbis')
