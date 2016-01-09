@@ -35,11 +35,8 @@ var transcode = function(ctx, next) {
         var videoCodec, audioCodec;
         for (var i = 0; i < meta.input.streams.length; i++) {
           var strm = meta.input.streams[i];
-          if (strm.type === 'video') {
-            videoCodec = strm.codec;
-          } else if (strm.type === 'audio') {
-            audioCodec = strm.codec;
-          }
+          if (strm.type === 'video') videoCodec = strm.codec;
+          if (strm.type === 'audio') audioCodec = strm.codec;
         }
         debug('got input metadata. vid:%s, aud:%s', videoCodec, audioCodec);
         //todo: a/v codecs ok?
