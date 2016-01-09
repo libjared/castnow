@@ -1,6 +1,5 @@
 var http = require('http');
 var internalIp = require('internal-ip');
-var got = require('got');
 var Transcoder = require('stream-transcoder');
 var grabOpts = require('../utils/grab-opts');
 var debug = require('debug')('castnow:transcode');
@@ -44,10 +43,6 @@ var transcode = function(ctx, next) {
         }
         debug('got input metadata. vid:%s, aud:%s', videoCodec, audioCodec);
         //todo: a/v codecs ok?
-        //var s = got(orgPath);
-        //s.on('error', function(err) {
-        //  debug('got error: %o', err);
-        //});
         doTranscode(orgPath, false, false, opts, res);
       })
       .exec();
