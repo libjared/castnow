@@ -59,6 +59,7 @@ var doTranscode = function(path, bAud, bVid, opts, res) {
     .audioCodec(bAud === true ? 'copy' : 'vorbis')
     .format('matroska')
     .custom('strict', 'experimental')
+    .custom('ac', '2')
     .on('finish', function() {
       debug('finished transcoding');
     })
