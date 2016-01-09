@@ -33,6 +33,20 @@ var transcode = function(ctx, next) {
       debug('got error: %o', err);
     });
 
+    var detect = new Transcoder(s)
+      .on('metadata', function(meta) {
+        var videoCodec, audioCodec;
+        for (var strm in meta.input.streams) {
+          if (strm.type === "video") {
+            videoCodec = strm.codec;
+          } else if (strm.type === "audio") {
+            audioCodec = strm.codec;
+          }
+        }
+        debug('got input metadata. vid:%s, aud:%s', videoCodec, audioCodec);
+      })
+      .exec();
+
     var trans = new Transcoder(s)
       .videoCodec('h264')
       .format('matroska')
